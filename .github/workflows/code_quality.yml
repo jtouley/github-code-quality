@@ -1,0 +1,33 @@
+name: Code Quality Analysis
+
+on:
+  pull_request:
+    branches: [main, development]
+
+jobs:
+  analyze-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run Code Quality Analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ENABLE_ANALYSIS: "true"
+          REPO: ${{ github.repository }}
+        run: |
+          source venv/bin/activate
+          python src/analyzer.py
