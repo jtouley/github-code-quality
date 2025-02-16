@@ -1,0 +1,12 @@
+name: GitHub Code Quality Analyzer
+description: "Analyzes code quality based on DRY and SOLID principles."
+inputs:
+  repo:
+    description: "GitHub repository to analyze (e.g., owner/repo)"
+    required: true
+  openai_api_key:
+    description: "API key for OpenAI"
+    required: true
+runs:
+  using: "python"
+  main: "src/analyzer.py"

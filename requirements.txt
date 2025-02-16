@@ -1,0 +1,8 @@
+openai
+requests
+pygithub
+python-dotenv
+pytest
+black
+flake8
+python-dotenv
