@@ -32,7 +32,7 @@ jobs:
           source venv/bin/activate
           python src/analyzer.py
 
-        - name: Post PR Comment with Analysis Feedback
+      - name: Post PR Comment with Analysis Feedback
         if: github.event_name == 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,4 +40,4 @@ jobs:
           GITHUB_REF: ${{ github.ref }}
         run: |
           source venv/bin/activate
-          python post_comment.py
+          python src/post_comment.py
