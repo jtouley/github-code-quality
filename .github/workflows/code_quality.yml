@@ -1,6 +1,7 @@
 name: Code Quality Analysis
 
 permissions:
+  pull-requests: write
   issues: write
 
 on:
