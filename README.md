@@ -13,14 +13,14 @@ cd github-code-quality
 
 ### 2. Set Up the Virtual Environment
 ```sh
-bash setup.sh
+bash config/setup.sh
 source venv/bin/activate
 ```
 
 ### 3. Configure Environment Variables
 Copy .env.example to .env and update with your API keys and repository info.
 ```sh
-cp .env.example .env
+cp config/.env.example .env
 ```
 
 ### 4. Run Locally
@@ -41,10 +41,20 @@ The included GitHub Action (in .github/workflows/code_quality.yml) runs on pull 
 
 ## Code Quality
 - Linting: Run black . and flake8 to check code formatting and style.
-- TODOs: See inline comments for areas marked for future improvements.
+```sh
+pre-commit run --all-files
+```
+- Pre-commit Hooks:
+Install pre-commit (pip install pre-commit) and run pre-commit install to enforce formatting and linting before each commit.
 
 ## Future Enhancements
 - Improve prompt engineering for better DRY/SOLID scoring.
 - Add error handling and logging enhancements.
 - Extend analysis to multiple programming languages.
 - Integrate a Streamlit dashboard for visualization.
+
+## Development & Debugging (Optional)
+
+For troubleshooting and development purposes, debug scripts are provided in the **tests/debug/** directory. These scripts help verify file retrieval, environment loading, and PR comment functionality. They are not intended for production use but can be useful during development.
+
+Happy coding, and let’s keep our code DRY and SOLID!

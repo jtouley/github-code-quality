@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 def analyze_repo():
     repo_name = os.getenv("REPO")
     if not repo_name:
@@ -26,6 +27,7 @@ def analyze_repo():
         results[path] = result
 
     print(json.dumps(results, indent=2))
+
 
 if __name__ == "__main__":
     analyze_repo()

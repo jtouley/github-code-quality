@@ -1,6 +1,7 @@
 import os
 from openai import OpenAI
 
+
 class AIClient:
     def __init__(self):
         self.api_key = os.getenv("OPENAI_API_KEY")
@@ -13,14 +14,15 @@ class AIClient:
         """Analyzes the given code using OpenAI for DRY & SOLID principles."""
         prompt = (
             "Analyze the following Python code and provide a score based on DRY and SOLID principles. "
-            "Output a score between 1 and 10 for DRY and SOLID, also include a brief summary for both.\n\n"
+            "Output a score between 1 and 10 for DRY and SOLID, also include a brief summary for both. "
+            "Keep your response concise (under 50 words total) and to the point.\n\n"
             f"{code}"
         )
         try:
             response = self.client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.3
+                temperature=0.3,
             )
             return response.choices[0].message.content
         except Exception as e:
