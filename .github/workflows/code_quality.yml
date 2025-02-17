@@ -1,5 +1,8 @@
 name: Code Quality Analysis
 
+permissions:
+  issues: write
+
 on:
   pull_request:
     branches: [main, development]
