@@ -1,6 +1,7 @@
 import os
 from openai import OpenAI
 
+
 class AIClient:
     def __init__(self):
         self.api_key = os.getenv("OPENAI_API_KEY")
@@ -20,7 +21,7 @@ class AIClient:
             response = self.client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.3
+                temperature=0.3,
             )
             return response.choices[0].message.content
         except Exception as e:

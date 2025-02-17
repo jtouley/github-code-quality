@@ -6,6 +6,7 @@ from ai_client import AIClient
 
 load_dotenv()  # Loads environment variables from .env if available
 
+
 def analyze_repo():
     if os.getenv("ENABLE_ANALYSIS", "true").lower() != "true":
         print("Code analysis is disabled. Exiting.")
@@ -30,6 +31,7 @@ def analyze_repo():
 
     # Output results (can be extended to write to file or database)
     print(json.dumps(results, indent=2))
+
 
 if __name__ == "__main__":
     analyze_repo()
