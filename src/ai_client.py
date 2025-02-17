@@ -14,7 +14,8 @@ class AIClient:
         """Analyzes the given code using OpenAI for DRY & SOLID principles."""
         prompt = (
             "Analyze the following Python code and provide a score based on DRY and SOLID principles. "
-            "Output a score between 1 and 10 for DRY and SOLID, also include a brief summary for both.\n\n"
+            "Output a score between 1 and 10 for DRY and SOLID, also include a brief summary for both. "
+            "Keep your response concise (under 50 words total) and to the point.\n\n"
             f"{code}"
         )
         try:

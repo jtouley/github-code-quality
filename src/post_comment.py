@@ -2,6 +2,15 @@ import os
 import requests
 
 
+def get_analysis_feedback():
+    feedback_file = "analysis_feedback.md"
+    if os.path.exists(feedback_file):
+        with open(feedback_file, "r") as f:
+            return f.read()
+    else:
+        return "No analysis feedback generated."
+
+
 def post_pr_comment(comment_body):
     # Extract repository info and PR number from environment variables.
     repo = os.getenv("GITHUB_REPOSITORY")  # e.g., "myorg/myrepo"
@@ -32,11 +41,5 @@ def post_pr_comment(comment_body):
 
 if __name__ == "__main__":
     # For demo purposes, here's a sample analysis feedback.
-    analysis_feedback = (
-        "## Code Quality Analysis Summary\n\n"
-        "- **DRY:** 7/10 – Some repetition in error handling could be refactored into a common utility.\n"
-        "- **SOLID:** 6/10 – The code works but could use improved modularity and dependency injection.\n\n"
-        "This analysis serves as a real-world example for our team to discuss and improve our ETL/ELT pipeline design.\n"
-        "Let's iterate further and aim for more maintainable, scalable code!"
-    )
+    analysis_feedback = get_analysis_feedback()
     post_pr_comment(analysis_feedback)

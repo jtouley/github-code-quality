@@ -25,11 +25,16 @@ def analyze_repo():
     results = {}
 
     for path, code in files:
-        # TODO: Enhance the prompt and error handling as needed
-        score = ai_client.analyze_code(code)
-        results[path] = score
+        # You might want to wrap the code in markdown code block markers.
+        prompt_code = f"```\n{code}\n```"
+        analysis = ai_client.analyze_code(prompt_code)
+        results[path] = analysis
 
-    # Output results (can be extended to write to file or database)
+    # Save the analysis output to a file
+    with open("analysis_feedback.md", "w") as f:
+        for file, feedback in results.items():
+            f.write(f"## Analysis for {file}\n")
+            f.write(feedback + "\n\n")
     print(json.dumps(results, indent=2))
 
 
