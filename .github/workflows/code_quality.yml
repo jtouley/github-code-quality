@@ -26,6 +26,14 @@ jobs:
           source venv/bin/activate
           pip install -r config/requirements.txt
 
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
+
+      - name: Debug Working Directory
+        run: |
+          echo "Current Directory: $(pwd)"
+          ls -R
+
       - name: Run Code Quality Analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -34,7 +42,7 @@ jobs:
           REPO: ${{ github.repository }}
         run: |
           source venv/bin/activate
-          python src/analyzer.py
+          python -m src.analyzer
 
       - name: Post PR Comment with Analysis Feedback
         if: github.event_name == 'pull_request'
@@ -44,4 +52,4 @@ jobs:
           GITHUB_REF: ${{ github.ref }}
         run: |
           source venv/bin/activate
-          python src/post_comment.py
+          python -m src.post_comment

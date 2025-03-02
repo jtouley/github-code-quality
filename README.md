@@ -1,49 +1,111 @@
 # GitHub Code Quality Analyzer
 
 ## Overview
-This project analyzes a GitHub repository's Python code for adherence to DRY and SOLID principles using OpenAI's API. It’s built as a reusable GitHub Action so you can easily integrate it into any repo.
 
-## Setup
+This project analyzes a GitHub repository’s Python code for adherence to DRY (Don’t Repeat Yourself) and SOLID principles using OpenAI’s API. It’s built as a reusable GitHub Action, making it easy to integrate into any repository.
 
-### 1. Clone the Repository
+### 🔥 Features:
+- Automated DRY & SOLID Analysis – Evaluates redundancy and software design principles.
+- Configurable Weights & Severity Thresholds – Tailor the analysis to your team’s needs.
+- PR Integration – Posts analysis results directly in pull requests.
+- Flexible Prompt Customization – Controls for depth, language specificity, and verbosity.
+
+## 📌 Setup & Installation
+
+### 1️⃣ Clone the Repository
 ```sh
 git clone https://github.com/yourusername/github-code-quality.git
 cd github-code-quality
 ```
 
-### 2. Set Up the Virtual Environment
+### 2️⃣ Run the Setup Script
 ```sh
 bash config/setup.sh
+```
+Alternatively, install dependencies manually:
+```sh
+python -m venv venv
 source venv/bin/activate
+pip install -r config/requirements.txt
 ```
 
-### 3. Configure Environment Variables
+### 3️⃣ Configure Environment Variables
 Copy .env.example to .env and update with your API keys and repository info.
 ```sh
 cp config/.env.example .env
 ```
 
-### 4. Run Locally
+## ⚙️ Configuration (config.yaml)
+
+Customize the analysis behavior by modifying config/config.yaml.
+
+### 1️⃣ DRY Analysis Configuration
+```yaml
+analysis:
+  dry:
+    enabled: true
+    weight: 0.6  # Weight of DRY analysis in final scoring
+    focus_areas:
+      logic_reuse: 0.4  # Encourages function reuse
+      data_centralization: 0.3  # Promotes shared data structures
+      abstraction_level: 0.3  # Encourages modular design
+    severity_threshold: 0.7  # Warning threshold
+```
+
+### 2️⃣ SOLID Principles Configuration
+```yaml
+  solid:
+    enabled: true
+    weight: 0.4
+    principles:
+      srp:  # Single Responsibility Principle
+        enabled: true
+        weight: 0.3
+      ocp:  # Open/Closed Principle
+        enabled: true
+        weight: 0.2
+      dip:  # Dependency Inversion Principle
+        enabled: true
+        weight: 0.5
+    severity_threshold: 0.6
+```
+### 3️⃣ PR Feedback Format
+```yaml
+feedback_format:
+  include_dry_score: true
+  include_solid_score: true
+  message_template: |
+    ## Analysis for {file}
+
+    ### DRY Analysis
+    **Score:** {dry_score}/10
+    {dry_analysis}
+
+    ### SOLID Principles Analysis
+    **Score:** {solid_score}/10
+    {solid_analysis}
+```
+## 🏃 Running the Analysis Locally
+To test before pushing changes:
 ```sh
 python src/analyzer.py
 ```
+For debugging PR comments:
+```sh
+python src/post_comment.py
+```
 
-Sample Output:
-```md
- "src/analyzer.py": "### DRY (Don't Repeat Yourself) Analysis\n\n**Score: 6/10**\n\n**Summary:**\nThe code adheres to the DRY principle to some extent, but there are areas where repetition could be reduced. For instance, the error handling for the environment variable REPO could be encapsulated into a separate function to avoid redundancy if similar checks are needed elsewhere in the code. Additionally, the process of initializing clients could be abstracted into a function to promote reuse and clarity. However, the code does not contain significant duplication, which is why it scores moderately well.\n\n### SOLID Principles Analysis\n\n**Score: 5/10**\n\n**Summary:**\nThe code exhibits some adherence to the SOLID principles but lacks in certain areas. \n\n- **Single Responsibility Principle (SRP):** The analyze_repo function does multiple things: it checks environment variables, initializes clients, and processes files. This could be broken down into smaller, more focused functions.\n  \n- **Open/Closed Principle (OCP):** The function is not easily extendable without modifying the existing code, as adding new types of analysis or output formats would require changes to the analyze_repo function itself.\n  \n- **Liskov Substitution Principle (LSP):** This principle is not directly applicable here as there are no class hierarchies involved.\n  \n- **Interface Segregation Principle (ISP):** The code does not define interfaces, so this principle isn't relevant in its current form.\n  \n- **Dependency Inversion Principle (DIP):** The function directly instantiates GitHubClient and AIClient, which can make testing and substituting these dependencies more difficult. Using dependency injection could improve this aspect.\n\nOverall, while the code is functional, it could benefit from a more modular design that adheres more closely to SOLID principles."
+## Sample Output:
+```json
+ "src/analyzer.py": {
+|     "dry_score": 7,
+|     "solid_score": 5,
+|     "full_analysis": "### DRY Analysis\n**Score: 7/10**  \n**Summary:** The code adheres reasonably well to the DRY (Don't Repeat Yourself) principle, but there are some areas for improvement. The `extract_scores` function is a good example of reusing logic to avoid repetition when extracting scores from the AI's response. However, the code could benefit from further abstraction in areas where similar patterns are observed. For instance, the logic for handling the absence of the `REPO` environment variable and the `ENABLE_ANALYSIS` flag could be encapsulated in a separate function to avoid redundancy and improve readability. Additionally, the way results are written to the file could be refactored into a dedicated function to streamline the code and reduce repetition. Overall, while the code avoids significant redundancy, there are opportunities for better reuse and encapsulation.\n\n### SOLID Analysis\n**Score: 5/10**  \n**Summary:** The code demonstrates partial adherence to the SOLID principles, particularly in terms of the Single Responsibility Principle (SRP) and the Open/Closed Principle (OCP). The `analyze_repo` function has multiple responsibilities: it checks environment variables, initializes clients, processes files, and writes results to a file. This violates the SRP, as it would be better to separate these concerns into distinct functions or classes. The code does not exhibit clear adherence to the OCP, as any changes to the analysis process would require modifications to the `analyze_repo` function itself. The Dependency Inversion Principle (DIP) is somewhat respected through the use of environment variables for configuration, but the tight coupling between the `analyze_repo` function and the specific clients (e.g., `GitHubClient` and `AIClient`) could be improved by using interfaces or abstract classes. Overall, the code could benefit from a more modular design that adheres more closely to SOLID principles."
  ```
 
-## Local Testing with act
+## 🛠️ Local Testing with act
 
 This repository supports local testing of the GitHub Action using [act](https://github.com/nektos/act) by [nektos](https://github.com/nektos).
-
-### Create the .env File
-
-Copy the sample environment file and update it with your credentials:
-
-```sh
-cp config/.env.example .env
-```
 
 ### Test the Action Locally
 
@@ -62,13 +124,22 @@ The included GitHub Action (in .github/workflows/code_quality.yml) runs on pull 
 - Reference this repository as an action or copy the workflow file.
 - Ensure that the target repository has the necessary secrets (GITHUB_TOKEN and OPENAI_API_KEY).
 
-## Code Quality
+## ✅ Code Quality Checks
 - Linting: Run black . and flake8 to check code formatting and style.
 ```sh
 pre-commit run --all-files
 ```
 - Pre-commit Hooks:
-Install pre-commit (pip install pre-commit) and run pre-commit install to enforce formatting and linting before each commit.
+Install pre-commit hooks:
+```sh
+pip install pre-commit
+pre-commit install
+```
+
+- Run Tests using pytest:
+```sh
+pytest tests/
+```
 
 ## Future Enhancements
 - Improve prompt engineering for better DRY/SOLID scoring.
@@ -76,8 +147,13 @@ Install pre-commit (pip install pre-commit) and run pre-commit install to enforc
 - Extend analysis to multiple programming languages.
 - Integrate a Streamlit dashboard for visualization.
 
-## Development & Debugging (Optional)
+## 🔹 What’s New?
 
-For troubleshooting and development purposes, debug scripts are provided in the **tests/debug/** directory. These scripts help verify file retrieval, environment loading, and PR comment functionality. They are not intended for production use but can be useful during development.
+- 1️⃣ Configurable Analysis Weights & Focus Areas
+- 2️⃣ Modular Setup via setup.sh
+- 3️⃣ Local Testing with act for PR Simulations
+- 4️⃣ More Robust GitHub Action Integration
 
-Happy coding, and let’s keep our code DRY and SOLID!
+This README ensures that teams can easily configure, test locally, and scale the analysis. 🚀 Let me know if you need refinements!
+
+### Happy coding, and let’s keep our code DRY and SOLID!
