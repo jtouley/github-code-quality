@@ -7,3 +7,4 @@ black
 flake8
 python-dotenv
 pre-commit
+pytest-mock

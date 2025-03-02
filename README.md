@@ -70,6 +70,11 @@ pre-commit run --all-files
 - Pre-commit Hooks:
 Install pre-commit (pip install pre-commit) and run pre-commit install to enforce formatting and linting before each commit.
 
+- Run tests using pytest:
+```sh
+pytest tests/
+```
+
 ## Future Enhancements
 - Improve prompt engineering for better DRY/SOLID scoring.
 - Add error handling and logging enhancements.
