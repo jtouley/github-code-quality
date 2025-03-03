@@ -43,10 +43,19 @@ class AnalysisResultHandler:
 
     def save_results(self, results):
         """Saves analysis results to the output file."""
+        log(f"Saving analysis results to {self.output_file}")
         with open(self.output_file, "w") as f:
             for file, feedback in results.items():
+                # Write markdown-friendly header
                 f.write(f"## Analysis for {file}\n")
-                f.write(json.dumps(feedback, indent=2) + "\n\n")
+
+                # Write the structured data in a way that preserves both markdown and JSON structure
+                f.write("```json\n")
+                f.write(json.dumps(feedback, indent=2))
+                f.write("\n```\n\n")
+
+                # For human readability, also include a direct markdown version
+                f.write(f"{feedback['full_analysis']}\n\n")
 
         log(f"Analysis results saved to {self.output_file}")
         return results

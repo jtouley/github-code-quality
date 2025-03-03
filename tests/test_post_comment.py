@@ -59,18 +59,51 @@ def test_feedback_provider_from_analysis(mock_format, mock_analyze_repo):
 @patch("builtins.open")
 def test_feedback_provider_from_file(mock_open, mock_exists):
     """Test getting feedback from a file."""
+    import sys
+
+    sys.stdout.write("Starting test_feedback_provider_from_file test\n")
+    sys.stdout.flush()
+
     # Setup mocks
     mock_exists.return_value = True
+    sys.stdout.write("Mock exists set up\n")
+    sys.stdout.flush()
+
+    # Create a mock file object with a read method
     mock_file = MagicMock()
     mock_file.__enter__.return_value.read.return_value = "File feedback content"
     mock_open.return_value = mock_file
+    sys.stdout.write("Mock file set up\n")
+    sys.stdout.flush()
 
-    # Create a provider and get feedback
-    provider = FeedbackProvider()
-    feedback = provider.get_from_file()
+    # Also mock load_config to avoid issues there
+    with patch("src.post_comment.load_config") as mock_load_config:
+        mock_load_config.return_value = {}
+        sys.stdout.write("Config mocked\n")
+        sys.stdout.flush()
 
-    # Verify the feedback is from the file
-    assert feedback == "File feedback content"
+        # Create a provider and get feedback
+        try:
+            sys.stdout.write("Creating FeedbackProvider\n")
+            sys.stdout.flush()
+            provider = FeedbackProvider()
+            sys.stdout.write("Provider created\n")
+            sys.stdout.flush()
+
+            sys.stdout.write("Calling get_from_file\n")
+            sys.stdout.flush()
+            feedback = provider.get_from_file()
+            sys.stdout.write("get_from_file completed\n")
+            sys.stdout.flush()
+
+            # Verify the feedback is from the file
+            assert feedback == "File feedback content"
+            sys.stdout.write("Test completed successfully\n")
+            sys.stdout.flush()
+        except Exception as e:
+            sys.stdout.write(f"Exception: {str(e)}\n")
+            sys.stdout.flush()
+            raise
 
 
 @patch("src.post_comment.FeedbackProvider.get_from_analysis")

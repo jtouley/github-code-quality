@@ -95,8 +95,8 @@ def test_config_manager_defaults(config_manager_with_defaults):
     config = config_manager_with_defaults.get_config()
 
     # Check default values
-    assert config["analysis"]["dry"]["weight"] == 0.7
-    assert config["analysis"]["solid"]["weight"] == 0.3
+    assert config["analysis"]["dry"]["weight"] == 0.6
+    assert config["analysis"]["solid"]["weight"] == 0.4
     assert config["prompt_customization"]["context_depth"] == "medium"
 
 
