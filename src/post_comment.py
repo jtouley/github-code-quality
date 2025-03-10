@@ -90,11 +90,21 @@ class GitHubPRCommenter:
     def _extract_pr_number(self):
         """Extracts PR number from GitHub environment variables."""
         ref = os.getenv("GITHUB_REF", "")
+        log(f"GITHUB_REF value: {ref}")
+
         if not ref or "pull" not in ref:
+            log("Not a pull request reference")
             return None
 
         try:
-            return ref.split("/")[2]
+            pr_number = ref.split("/")[2]
+            log(f"Extracted PR number: {pr_number}")
+
+            if not pr_number or not pr_number.isdigit():
+                log(f"Invalid PR number format: {pr_number}")
+                return None
+
+            return pr_number
         except (IndexError, TypeError):
             log(f"Could not extract PR number from reference: {ref}")
             return None
@@ -118,7 +128,8 @@ class GitHubPRCommenter:
     def post_comment(self, comment_body):
         """Posts a comment to a GitHub Pull Request."""
         if not self._validate():
-            return False
+            log("Skipping PR comment - not in a PR context or missing configuration")
+            return True
 
         url = (
             f"https://api.github.com/repos/{self.repo}/issues/{self.pr_number}/comments"
