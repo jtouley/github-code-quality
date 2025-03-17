@@ -7,5 +7,9 @@ export REPO=$INPUT_REPO
 export GITHUB_TOKEN=$INPUT_GITHUB_TOKEN
 export ENABLE_ANALYSIS=true
 
-# Run the analyzer
-python src/analyzer.py
+# Print working directory for debugging
+echo "Current working directory: $(pwd)"
+ls -la
+
+# Run the analyzer with the correct path
+python /app/src/analyzer.py
