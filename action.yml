@@ -7,6 +7,9 @@ inputs:
   openai_api_key:
     description: "API key for OpenAI"
     required: true
+  github_token:
+    description: "GitHub token for API access"
+    required: true
 runs:
-  using: "python"
-  main: "src/analyzer.py"
+  using: "docker"
+  image: "Dockerfile"
